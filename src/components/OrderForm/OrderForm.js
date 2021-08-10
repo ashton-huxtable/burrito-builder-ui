@@ -6,13 +6,34 @@ class OrderForm extends Component {
     this.props = props;
     this.state = {
       name: '',
-      ingredients: []
+      ingredients: [],
+      error: '',
+      
     };
   }
 
+  handleNameChange = e => {
+    this.setState({name: e.target.value})
+  }
+  
+  handleIngredientChange = e => {
+    e.preventDefault();
+    this.setState({ingredients: [...this.state.ingredients, (e.target.name)]})
+
+  }
 
   handleSubmit = e => {
     e.preventDefault();
+    const newOrder = {
+      name: this.state.name,
+      ingredients: this.state.ingredients
+    }
+
+    {(this.state.name && this.state.ingredients.length) ?
+      (this.props.addOrder(newOrder) && this.clearError()) :
+      this.setState({error: 'Sorry, you must enter a name and at least one ingredient to order!'})
+    }
+
     this.clearInputs();
   }
 
@@ -20,11 +41,15 @@ class OrderForm extends Component {
     this.setState({name: '', ingredients: []});
   }
 
+  clearError = () => {
+    this.setState({error: ''})
+  }
+
   render() {
     const possibleIngredients = ['beans', 'steak', 'carnitas', 'sofritas', 'lettuce', 'queso fresco', 'pico de gallo', 'hot sauce', 'guacamole', 'jalapenos', 'cilantro', 'sour cream'];
     const ingredientButtons = possibleIngredients.map(ingredient => {
       return (
-        <button key={ingredient} name={ingredient} onClick={e => this.handleIngredientChange(e)}>
+        <button className='ingredients' key={ingredient} name={ingredient} onClick={e => this.handleIngredientChange(e)}>
           {ingredient}
         </button>
       )
@@ -39,14 +64,16 @@ class OrderForm extends Component {
           value={this.state.name}
           onChange={e => this.handleNameChange(e)}
         />
+        <div className='ing-section'>
+          { ingredientButtons }
+        </div>
 
-        { ingredientButtons }
+        <p className='order-list'>Order: { this.state.ingredients.join(', ') || 'Nothing selected' }</p>
 
-        <p>Order: { this.state.ingredients.join(', ') || 'Nothing selected' }</p>
-
-        <button onClick={e => this.handleSubmit(e)}>
+        <button className='submit-btn' onClick={e => this.handleSubmit(e)}>
           Submit Order
         </button>
+        {this.state.error && <h4>{this.state.error}</h4>}
       </form>
     )
   }
