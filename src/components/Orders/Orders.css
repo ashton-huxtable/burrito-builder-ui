@@ -1,12 +1,35 @@
+.orders-section{
+  height: 20em;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  overflow-y: scroll;
+  margin: 0;
+}
+
 .order {
   border: 1px solid black;
   display: inline-block;
   margin: 10px;
   background-color: #FFF;
+  width: 13em;
+  height: auto;
+
+}
+
+.orders{
+  margin-top: 1em;
 }
 
 .ingredient-list {
   list-style-type: none;
   padding: 0;
-  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.order-name {
+  text-decoration: underline;
 }
